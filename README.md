@@ -1,1 +1,1 @@
-# tcc-batch-service
+# tcc-recipe-service
