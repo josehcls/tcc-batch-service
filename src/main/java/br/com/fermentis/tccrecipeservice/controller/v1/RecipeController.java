@@ -6,10 +6,7 @@ import br.com.fermentis.tccrecipeservice.service.BatchService;
 import br.com.fermentis.tccrecipeservice.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,11 +22,21 @@ public class RecipeController {
 
     @GetMapping()
     public ResponseEntity<List<RecipeDTO>> getRecipes(){
-        return ResponseEntity.ok(recipeService.getRecipes());
+        return ResponseEntity.ok(recipeService.findRecipes());
+    }
+
+    @PostMapping()
+    public ResponseEntity<RecipeDTO> createRecipes(@RequestBody RecipeDTO recipeDTO) {
+        return ResponseEntity.ok(recipeService.createRecipe(recipeDTO));
     }
 
     @GetMapping("/{recipeId}/batches")
     public ResponseEntity<List<BatchDTO>> getBatchesFromRecipe(@PathVariable Long recipeId) {
         return ResponseEntity.ok(batchService.getBatchesByRecipe(recipeId));
+    }
+
+    @PostMapping("/{recipeId}/batches")
+    public ResponseEntity<BatchDTO> createBatche (@PathVariable Long recipeId, @RequestBody BatchDTO batchDTO) {
+        return ResponseEntity.ok(batchService.createBatch(recipeId, batchDTO));
     }
 }

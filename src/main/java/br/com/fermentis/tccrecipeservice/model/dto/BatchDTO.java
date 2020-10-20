@@ -3,13 +3,15 @@ package br.com.fermentis.tccrecipeservice.model.dto;
 import br.com.fermentis.tccrecipeservice.model.entity.Batch;
 import br.com.fermentis.tccrecipeservice.model.enumerator.BatchStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Date;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BatchDTO {
     @JsonProperty("id")
     private Long id;

@@ -1,8 +1,7 @@
 package br.com.fermentis.tccrecipeservice.model.entity;
 
 import br.com.fermentis.tccrecipeservice.model.enumerator.BatchStatus;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,6 +10,9 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(schema = "recipe", name = "batches")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Batch {
     @Id
     @Column(name = "batch_id")
@@ -30,6 +32,7 @@ public class Batch {
     @Column(name = "finished_at")
     private Date finishedAt;
 
+//    @Enumerated(EnumType.STRING)
     @Column(name = "status")
 //    private BatchStatus status;
     private String status;

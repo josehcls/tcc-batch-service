@@ -1,8 +1,7 @@
 package br.com.fermentis.tccrecipeservice.model.entity;
 
 import br.com.fermentis.tccrecipeservice.model.enumerator.ControlVariable;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -12,12 +11,16 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(schema = "control", name = "control_profile_steps")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class ControlProfileStep {
     @Id
     @Column(name = "control_profile_step_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "variable")
     private ControlVariable variable;
 

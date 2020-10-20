@@ -1,7 +1,6 @@
 package br.com.fermentis.tccrecipeservice.model.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -10,6 +9,9 @@ import java.util.Date;
 @Setter
 @Entity
 @Table(schema = "recipe", name = "recipes")
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Recipe {
     @Id
     @Column(name = "recipe_id")
