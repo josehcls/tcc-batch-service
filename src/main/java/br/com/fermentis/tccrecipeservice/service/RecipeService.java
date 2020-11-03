@@ -47,6 +47,7 @@ public class RecipeService {
         return Recipe.builder()
                 .name(recipeDTO.getName())
                 .style(recipeDTO.getStyle())
+                .misc(recipeDTO.getMisc())
                 // TODO: get User
                 .createdBy(1L)
                 .createdAt(new Date())

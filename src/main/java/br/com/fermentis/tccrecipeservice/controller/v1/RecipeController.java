@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/recipes")
@@ -23,6 +24,11 @@ public class RecipeController {
     @GetMapping()
     public ResponseEntity<List<RecipeDTO>> getRecipes(){
         return ResponseEntity.ok(recipeService.findRecipes());
+    }
+
+    @GetMapping("/{recipeId}")
+    public ResponseEntity<RecipeDTO> getRecipes(@PathVariable Long recipeId){
+        return ResponseEntity.ok(recipeService.findRecipe(recipeId));
     }
 
     @PostMapping()

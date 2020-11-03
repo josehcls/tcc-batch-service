@@ -24,6 +24,9 @@ public class Recipe {
     @Column(name = "style")
     private String style;
 
+    @Column(name = "misc")
+    private String misc;
+
     @Column(name = "created_by")
     private Long createdBy;
 

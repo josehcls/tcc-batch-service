@@ -22,6 +22,9 @@ public class RecipeDTO {
     @JsonProperty("style")
     private String style;
 
+    @JsonProperty("misc")
+    private String misc;
+
     @JsonProperty("created_by")
     private Long createdBy;
 
@@ -32,6 +35,7 @@ public class RecipeDTO {
         this.recipeId = recipe.getId();
         this.name = recipe.getName();
         this.style = recipe.getStyle();
+        this.misc = recipe.getMisc();
         this.createdBy = recipe.getCreatedBy();
         this.createdAt = recipe.getCreatedAt();
     }
