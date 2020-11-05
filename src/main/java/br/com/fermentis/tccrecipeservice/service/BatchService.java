@@ -30,9 +30,9 @@ public class BatchService {
         return batches.stream().map(BatchDTO::new).collect(toList());
     }
 
-    public BatchDTO createBatch(Long recipeId, BatchDTO batchDTO) {
+    public BatchDTO createBatch(Long recipeId, BatchDTO batchDTO) throws Exception {
         // TODO: Validate object (fields and duplicate)
-        Recipe recipe = recipeService.getRecipe(recipeId).orElse(null);
+        Recipe recipe = recipeService.findRecipe(recipeId).orElseThrow(() -> new Exception("Recipe not found"));
         ControlProfile controlProfile = controlProfileService.getControlProfile(batchDTO.getControlProfile().getId()).orElse(null);
         Batch batch = mapFrom(batchDTO, recipe, controlProfile);
         batchRepository.save(batch);

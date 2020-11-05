@@ -5,6 +5,8 @@ import br.com.fermentis.tccrecipeservice.model.dto.RecipeDTO;
 import br.com.fermentis.tccrecipeservice.service.BatchService;
 import br.com.fermentis.tccrecipeservice.service.RecipeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,18 +24,29 @@ public class RecipeController {
     private BatchService batchService;
 
     @GetMapping()
-    public ResponseEntity<List<RecipeDTO>> getRecipes(){
-        return ResponseEntity.ok(recipeService.findRecipes());
+    public ResponseEntity<Page<RecipeDTO>> getRecipes(Pageable pageable){
+        return ResponseEntity.ok(recipeService.findRecipes(pageable));
     }
 
     @GetMapping("/{recipeId}")
-    public ResponseEntity<RecipeDTO> getRecipes(@PathVariable Long recipeId){
-        return ResponseEntity.ok(recipeService.findRecipe(recipeId));
+    public ResponseEntity<RecipeDTO> getRecipe(@PathVariable Long recipeId) throws Exception {
+        return ResponseEntity.ok(recipeService.getRecipe(recipeId));
     }
 
     @PostMapping()
-    public ResponseEntity<RecipeDTO> createRecipes(@RequestBody RecipeDTO recipeDTO) {
+    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeDTO recipeDTO) {
         return ResponseEntity.ok(recipeService.createRecipe(recipeDTO));
+    }
+
+    @PutMapping("/{recipeId}")
+    public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeDTO recipeDTO) throws Exception {
+        return ResponseEntity.ok(recipeService.updateRecipe(recipeId, recipeDTO));
+    }
+
+    @DeleteMapping("/{recipeId}")
+    public ResponseEntity getRecipes(@PathVariable Long recipeId) throws Exception {
+        recipeService.deleteRecipe(recipeId);
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/{recipeId}/batches")
@@ -42,7 +55,7 @@ public class RecipeController {
     }
 
     @PostMapping("/{recipeId}/batches")
-    public ResponseEntity<BatchDTO> createBatche (@PathVariable Long recipeId, @RequestBody BatchDTO batchDTO) {
+    public ResponseEntity<BatchDTO> createBatch (@PathVariable Long recipeId, @RequestBody BatchDTO batchDTO) throws Exception {
         return ResponseEntity.ok(batchService.createBatch(recipeId, batchDTO));
     }
 }

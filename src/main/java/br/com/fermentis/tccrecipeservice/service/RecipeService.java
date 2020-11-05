@@ -4,11 +4,13 @@ import br.com.fermentis.tccrecipeservice.model.dto.RecipeDTO;
 import br.com.fermentis.tccrecipeservice.model.entity.Recipe;
 import br.com.fermentis.tccrecipeservice.model.repository.RecipeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
@@ -20,19 +22,19 @@ public class RecipeService {
     private RecipeRepository recipeRepository;
 
     @Transactional(readOnly = true)
-    public List<RecipeDTO> findRecipes() {
-        List<Recipe> recipes = recipeRepository.findAll();
-        return recipes.stream().map(RecipeDTO::new).collect(toList());
+    public Page<RecipeDTO> findRecipes(Pageable pageable) {
+        Page<Recipe> recipes = recipeRepository.findRecipes(pageable);
+        return new PageImpl<>(recipes.getContent().stream().map(RecipeDTO::new).collect(toList()), pageable, recipes.getTotalElements());
     }
 
     @Transactional(readOnly = true)
-    public RecipeDTO findRecipe(Long recipeId) {
-        Optional<Recipe> recipe = getRecipe(recipeId);
-        return recipe.isPresent() ? new RecipeDTO(recipe.get()) : null;
+    protected Optional<Recipe> findRecipe(Long recipeId) {
+        return recipeRepository.findById(recipeId);
     }
 
-    protected Optional<Recipe> getRecipe(long recipeId) {
-        return recipeRepository.findById(recipeId);
+    public RecipeDTO getRecipe(long recipeId) throws Exception {
+        Recipe recipe = findRecipe(recipeId).orElseThrow(() -> new Exception("Recipe not found"));
+        return new RecipeDTO(recipe);
     }
 
     @Transactional
@@ -52,5 +54,21 @@ public class RecipeService {
                 .createdBy(1L)
                 .createdAt(new Date())
                 .build();
+    }
+
+    public RecipeDTO updateRecipe(Long recipeId, RecipeDTO recipeDTO) throws Exception {
+        Recipe recipe = findRecipe(recipeId).orElseThrow(() -> new Exception("Recipe not found"));
+        // TODO: Validate object (fields and duplicate)
+        recipe.setName(recipeDTO.getName());
+        recipe.setStyle(recipeDTO.getStyle());
+        recipe.setMisc(recipeDTO.getMisc());
+        recipeRepository.save(recipe);
+        return new RecipeDTO(recipe);
+    }
+
+    public void deleteRecipe(Long recipeId) throws Exception {
+        Recipe recipe = findRecipe(recipeId).orElseThrow(() -> new Exception("Recipe not found"));
+        recipe.setDeletedAt(new Date());
+        recipeRepository.save(recipe);
     }
 }
