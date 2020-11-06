@@ -10,9 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/v1/recipes")
 public class RecipeController {
@@ -24,8 +21,9 @@ public class RecipeController {
     private BatchService batchService;
 
     @GetMapping()
-    public ResponseEntity<Page<RecipeDTO>> getRecipes(Pageable pageable){
-        return ResponseEntity.ok(recipeService.findRecipes(pageable));
+    public ResponseEntity<Page<RecipeDTO>> getRecipes(@RequestParam(value = "query", required = false, defaultValue = "") String query,
+                                                      Pageable pageable){
+        return ResponseEntity.ok(recipeService.getRecipes(query, pageable));
     }
 
     @GetMapping("/{recipeId}")
@@ -39,7 +37,8 @@ public class RecipeController {
     }
 
     @PutMapping("/{recipeId}")
-    public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable Long recipeId, @RequestBody RecipeDTO recipeDTO) throws Exception {
+    public ResponseEntity<RecipeDTO> updateRecipe(@PathVariable Long recipeId,
+                                                  @RequestBody RecipeDTO recipeDTO) throws Exception {
         return ResponseEntity.ok(recipeService.updateRecipe(recipeId, recipeDTO));
     }
 
@@ -50,12 +49,10 @@ public class RecipeController {
     }
 
     @GetMapping("/{recipeId}/batches")
-    public ResponseEntity<List<BatchDTO>> getBatchesFromRecipe(@PathVariable Long recipeId) {
-        return ResponseEntity.ok(batchService.getBatchesByRecipe(recipeId));
+    public ResponseEntity<Page<BatchDTO>> getBatchesFromRecipe(@PathVariable Long recipeId,
+                                                               @RequestParam(value = "query", required = false, defaultValue = "") String query,
+                                                               Pageable pageable) {
+        return ResponseEntity.ok(batchService.getBatchesByRecipe(recipeId, query, pageable));
     }
 
-    @PostMapping("/{recipeId}/batches")
-    public ResponseEntity<BatchDTO> createBatch (@PathVariable Long recipeId, @RequestBody BatchDTO batchDTO) throws Exception {
-        return ResponseEntity.ok(batchService.createBatch(recipeId, batchDTO));
-    }
 }

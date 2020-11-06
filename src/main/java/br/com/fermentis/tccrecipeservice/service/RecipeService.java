@@ -22,8 +22,9 @@ public class RecipeService {
     private RecipeRepository recipeRepository;
 
     @Transactional(readOnly = true)
-    public Page<RecipeDTO> findRecipes(Pageable pageable) {
-        Page<Recipe> recipes = recipeRepository.findRecipes(pageable);
+    public Page<RecipeDTO> getRecipes(String query, Pageable pageable) {
+        query = "%" + query + "%";
+        Page<Recipe> recipes = recipeRepository.getRecipes(query, pageable);
         return new PageImpl<>(recipes.getContent().stream().map(RecipeDTO::new).collect(toList()), pageable, recipes.getTotalElements());
     }
 
@@ -56,6 +57,7 @@ public class RecipeService {
                 .build();
     }
 
+    @Transactional
     public RecipeDTO updateRecipe(Long recipeId, RecipeDTO recipeDTO) throws Exception {
         Recipe recipe = findRecipe(recipeId).orElseThrow(() -> new Exception("Recipe not found"));
         // TODO: Validate object (fields and duplicate)
@@ -66,6 +68,7 @@ public class RecipeService {
         return new RecipeDTO(recipe);
     }
 
+    @Transactional
     public void deleteRecipe(Long recipeId) throws Exception {
         Recipe recipe = findRecipe(recipeId).orElseThrow(() -> new Exception("Recipe not found"));
         recipe.setDeletedAt(new Date());
