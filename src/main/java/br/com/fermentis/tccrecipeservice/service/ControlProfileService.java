@@ -6,11 +6,13 @@ import br.com.fermentis.tccrecipeservice.model.entity.ControlProfile;
 import br.com.fermentis.tccrecipeservice.model.entity.ControlProfileStep;
 import br.com.fermentis.tccrecipeservice.model.repository.ControlProfileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
@@ -22,9 +24,10 @@ public class ControlProfileService {
     private ControlProfileRepository controlProfileRepository;
 
     @Transactional(readOnly = true)
-    public List<ControlProfileDTO> getControlProfiles() {
-        List<ControlProfile> controlProfiles = controlProfileRepository.findAll();
-        return controlProfiles.stream().map(ControlProfileDTO::new).collect(toList());
+    public Page<ControlProfileDTO> getControlProfiles(String query, Pageable pageable) {
+        query = "%" + query + "%";
+        Page<ControlProfile> controlProfiles = controlProfileRepository.getControlProfiles(query, pageable);
+        return new PageImpl<>(controlProfiles.getContent().stream().map(ControlProfileDTO::new).collect(toList()), pageable, controlProfiles.getTotalElements());
     }
 
     @Transactional(readOnly = true)

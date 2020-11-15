@@ -15,5 +15,5 @@ public interface ControlProfileRepository extends JpaRepository<ControlProfile, 
             countQuery="SELECT COUNT(1) FROM control.control_profiles WHERE name LIKE :query AND deleted_at IS NULL",
             nativeQuery = true
     )
-    Page<ControlProfile> findControlProfiles(@Param("query") String query, Pageable pageable);
+    Page<ControlProfile> getControlProfiles(@Param("query") String query, Pageable pageable);
 }
