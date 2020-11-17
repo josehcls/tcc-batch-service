@@ -21,8 +21,24 @@ public class ControlProfileController {
         return ResponseEntity.ok(controlProfileService.getControlProfiles(query, pageable));
     }
 
+    @GetMapping("/{controlProfileId}")
+    public ResponseEntity<ControlProfileDTO> getControlProfile(@PathVariable Long controlProfileId) throws Exception {
+        return ResponseEntity.ok(controlProfileService.getControlProfile(controlProfileId));
+    }
+
     @PostMapping()
     public ResponseEntity<ControlProfileDTO> CrateControlProfiles(@RequestBody ControlProfileDTO controlProfileDTO) {
         return ResponseEntity.ok(controlProfileService.createControlProfile(controlProfileDTO));
+    }
+
+    @PutMapping("/{controlProfileId}")
+    public ResponseEntity<ControlProfileDTO> updateControlProfile(@PathVariable Long controlProfileId, @RequestBody ControlProfileDTO controlProfileDTO) throws Exception {
+        return ResponseEntity.ok(controlProfileService.updateControlProfile(controlProfileId, controlProfileDTO));
+    }
+
+    @DeleteMapping("/{controlProfileId}")
+    public ResponseEntity deleteControlProfile(@PathVariable Long controlProfileId) throws Exception {
+        controlProfileService.deleteControlProfile(controlProfileId);
+        return ResponseEntity.ok().build();
     }
 }

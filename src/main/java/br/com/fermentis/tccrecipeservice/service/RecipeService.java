@@ -28,11 +28,11 @@ public class RecipeService {
         return new PageImpl<>(recipes.getContent().stream().map(RecipeDTO::new).collect(toList()), pageable, recipes.getTotalElements());
     }
 
-    @Transactional(readOnly = true)
     protected Optional<Recipe> findRecipe(Long recipeId) {
         return recipeRepository.findById(recipeId);
     }
 
+    @Transactional(readOnly = true)
     public RecipeDTO getRecipe(long recipeId) throws Exception {
         Recipe recipe = findRecipe(recipeId).orElseThrow(() -> new Exception("Recipe not found"));
         return new RecipeDTO(recipe);
@@ -54,6 +54,7 @@ public class RecipeService {
                 // TODO: get User
                 .createdBy(1L)
                 .createdAt(new Date())
+                .updatedAt(new Date())
                 .build();
     }
 
@@ -64,6 +65,7 @@ public class RecipeService {
         recipe.setName(recipeDTO.getName());
         recipe.setStyle(recipeDTO.getStyle());
         recipe.setMisc(recipeDTO.getMisc());
+        recipe.setUpdatedAt(new Date());
         recipeRepository.save(recipe);
         return new RecipeDTO(recipe);
     }
@@ -72,6 +74,7 @@ public class RecipeService {
     public void deleteRecipe(Long recipeId) throws Exception {
         Recipe recipe = findRecipe(recipeId).orElseThrow(() -> new Exception("Recipe not found"));
         recipe.setDeletedAt(new Date());
+        recipe.setUpdatedAt(new Date());
         recipeRepository.save(recipe);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.expression.ExpressionException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,14 +31,14 @@ public class ControlProfileService {
         return new PageImpl<>(controlProfiles.getContent().stream().map(ControlProfileDTO::new).collect(toList()), pageable, controlProfiles.getTotalElements());
     }
 
-    @Transactional(readOnly = true)
-    public ControlProfileDTO findControlProfile(Long controlProfileID) {
-        Optional<ControlProfile> controlProfile = getControlProfile(controlProfileID);
-        return controlProfile.isPresent() ? new ControlProfileDTO(controlProfile.get()) : null;
+    protected Optional<ControlProfile> findControlProfile(Long controlProfileID) {
+        return controlProfileRepository.findById(controlProfileID);
     }
 
-    protected Optional<ControlProfile> getControlProfile(long controlProfileId) {
-        return controlProfileRepository.findById(controlProfileId);
+    @Transactional(readOnly = true)
+    public ControlProfileDTO getControlProfile(long controlProfileId) throws Exception {
+        ControlProfile controlProfile = findControlProfile(controlProfileId).orElseThrow(() -> new Exception("Control Profile not found"));
+        return new ControlProfileDTO(controlProfile);
     }
 
     @Transactional
@@ -54,6 +55,7 @@ public class ControlProfileService {
                 // TODO: get User
                 .createdBy(1L)
                 .createdAt(new Date())
+                .updatedAt(new Date())
                 .steps(controlProfileDTO.getSteps().stream().map(this::mapFrom).collect(toList()))
                 .build();
     }
@@ -65,6 +67,25 @@ public class ControlProfileService {
                 .timeOffset(step.getTimeOffset())
                 .createdAt(new Date())
                 .build();
+    }
+
+    @Transactional
+    public ControlProfileDTO updateControlProfile(Long controlProfileId, ControlProfileDTO controlProfileDTO) throws Exception {
+        ControlProfile controlProfile = findControlProfile(controlProfileId).orElseThrow(() -> new Exception("Control Profile not found"));
+        // TODO: Validate object (fields and duplicate)
+        controlProfile.setName(controlProfileDTO.getName());
+        controlProfile.setSteps(controlProfileDTO.getSteps().stream().map(this::mapFrom).collect(toList()));
+        controlProfile.setUpdatedAt(new Date());
+        controlProfileRepository.save(controlProfile);
+        return new ControlProfileDTO(controlProfile);
+    }
+
+    @Transactional
+    public void deleteControlProfile(Long controlProfileId) throws Exception {
+        ControlProfile controlProfile = findControlProfile(controlProfileId).orElseThrow(() -> new Exception("Control Profile not found"));
+        controlProfile.setDeletedAt(new Date());
+        controlProfile.setUpdatedAt(new Date());
+        controlProfileRepository.save(controlProfile);
     }
 
 }

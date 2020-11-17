@@ -38,7 +38,7 @@ public class BatchService {
     public BatchDTO createBatch(BatchDTO batchDTO) throws Exception {
         // TODO: Validate object (fields and duplicate)
         Recipe recipe = recipeService.findRecipe(batchDTO.getRecipe().getRecipeId()).orElseThrow(() -> new Exception("Recipe not found"));
-        ControlProfile controlProfile = controlProfileService.getControlProfile(batchDTO.getControlProfile().getId()).orElse(null);
+        ControlProfile controlProfile = controlProfileService.findControlProfile(batchDTO.getControlProfile().getId()).orElse(null);
         Batch batch = mapFrom(batchDTO, recipe, controlProfile);
         batchRepository.save(batch);
         return new BatchDTO(batch);
@@ -54,6 +54,7 @@ public class BatchService {
                 // TODO: get User
                 .createdBy(1L)
                 .createdAt(new Date())
+                .updatedAt(new Date())
                 .build();
     }
 
@@ -70,11 +71,12 @@ public class BatchService {
     @Transactional
     public BatchDTO updateBatch(Long batchId, BatchDTO batchDTO) throws Exception {
         Batch batch = findBatch(batchId).orElseThrow(() -> new Exception("Batch not found"));
-        ControlProfile controlProfile = controlProfileService.getControlProfile(batchDTO.getControlProfile().getId()).orElse(null);
+        ControlProfile controlProfile = controlProfileService.findControlProfile(batchDTO.getControlProfile().getId()).orElse(null);
         // TODO: Validate object (fields and duplicate)
         batch.setName(batchDTO.getName());
         batch.setMisc(batchDTO.getMisc());
         batch.setControlProfile(controlProfile);
+        batch.setUpdatedAt(new Date());
         batchRepository.save(batch);
         return new BatchDTO(batch);
     }
@@ -83,6 +85,7 @@ public class BatchService {
     public void deleteBatch(Long batchId) throws Exception {
         Batch batch = findBatch(batchId).orElseThrow(() -> new Exception("Batch not found"));
         batch.setDeletedAt(new Date());
+        batch.setUpdatedAt(new Date());
         batchRepository.save(batch);
     }
 }
