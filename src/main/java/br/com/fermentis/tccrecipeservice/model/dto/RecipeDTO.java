@@ -14,7 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class RecipeDTO {
     @JsonProperty("recipe_id")
-    private Long recipeId;
+    private Long id;
 
     @JsonProperty("name")
     private String name;
@@ -32,7 +32,7 @@ public class RecipeDTO {
     private Date createdAt;
 
     public RecipeDTO (Recipe recipe) {
-        this.recipeId = recipe.getId();
+        this.id = recipe.getId();
         this.name = recipe.getName();
         this.style = recipe.getStyle();
         this.misc = recipe.getMisc();

@@ -48,6 +48,7 @@ public class RecipeService {
 
     private Recipe mapFrom(RecipeDTO recipeDTO) {
         return Recipe.builder()
+                .id(recipeDTO.getId())
                 .name(recipeDTO.getName())
                 .style(recipeDTO.getStyle())
                 .misc(recipeDTO.getMisc())

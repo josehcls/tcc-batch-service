@@ -20,6 +20,9 @@ public class ControlProfileStep {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "step")
+    private Integer step;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "variable")
     private ControlVariable variable;

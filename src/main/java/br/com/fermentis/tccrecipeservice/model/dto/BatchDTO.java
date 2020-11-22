@@ -1,6 +1,7 @@
 package br.com.fermentis.tccrecipeservice.model.dto;
 
 import br.com.fermentis.tccrecipeservice.model.entity.Batch;
+import br.com.fermentis.tccrecipeservice.model.entity.ControlProfile;
 import br.com.fermentis.tccrecipeservice.model.enumerator.BatchStatus;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -13,7 +14,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 public class BatchDTO {
-    @JsonProperty("id")
+    @JsonProperty("batch_id")
     private Long id;
 
     @JsonProperty("name")
@@ -29,8 +30,7 @@ public class BatchDTO {
     private Date finishedAt;
 
     @JsonProperty("status")
-//    private BatchStatus status;
-    private String status;
+    private BatchStatus status;
 
     @JsonProperty("misc")
     private String misc;
@@ -44,7 +44,7 @@ public class BatchDTO {
     @JsonProperty("created_at")
     private Date createdAt;
 
-    public BatchDTO (Batch batch) {
+    public BatchDTO (Batch batch, ControlProfileDTO controlProfile) {
         this.id = batch.getId();
         this.name = batch.getName();
         this.recipe = new RecipeDTO(batch.getRecipe());
@@ -52,7 +52,7 @@ public class BatchDTO {
         this.finishedAt = batch.getFinishedAt();
         this.status = batch.getStatus();
         this.misc = batch.getMisc();
-        this.controlProfile = null; // TODO Control Profile DTO
+        this.controlProfile = controlProfile;
         this.createdBy = batch.getCreatedBy();
         this.createdAt = batch.getCreatedAt();
     }

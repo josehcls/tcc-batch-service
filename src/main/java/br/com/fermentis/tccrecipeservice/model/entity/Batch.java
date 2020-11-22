@@ -32,16 +32,14 @@ public class Batch {
     @Column(name = "finished_at")
     private Date finishedAt;
 
-//    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-//    private BatchStatus status;
-    private String status;
-    //TODO BatchStatus
+    private BatchStatus status;
 
     @Column(name = "misc")
     private String misc;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "control_profile_id")
     private ControlProfile controlProfile;
 

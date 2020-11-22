@@ -16,6 +16,9 @@ public class ControlProfileStepDTO {
     @JsonProperty(value = "control_profile_step_id")
     private Long id;
 
+    @JsonProperty(value = "step")
+    private Integer step;
+
     @JsonProperty(value = "variable")
     private ControlVariable variable;
 
@@ -27,6 +30,7 @@ public class ControlProfileStepDTO {
 
     public ControlProfileStepDTO (ControlProfileStep controlProfileStep) {
         this.id = controlProfileStep.getId();
+        this.step = controlProfileStep.getStep();
         this.variable = controlProfileStep.getVariable();
         this.value = controlProfileStep.getValue();
         this.timeOffset = controlProfileStep.getTimeOffset();
