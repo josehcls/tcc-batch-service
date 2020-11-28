@@ -14,16 +14,11 @@
 #
 # Build stage
 #
-FROM maven:3.6.0-jdk-11-slim AS build
-COPY src /home/app/src
-COPY pom.xml /home/app
-RUN mvn -f /home/app/pom.xml clean package
 
 #
 # Package stage
 #
 FROM openjdk:11.0.8-jre-slim-buster
-RUN mvn clean package -DskipTests
 ADD target/tcc-recipe-service-*.jar tcc-recipe-service.jar
 EXPOSE 8080
 ENTRYPOINT [ "sh", "-c", "java -Xms128m -Xmx256m -jar /tcc-recipe-service.jar" ]
