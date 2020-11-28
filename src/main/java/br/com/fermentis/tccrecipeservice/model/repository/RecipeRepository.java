@@ -12,7 +12,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query(value="SELECT * FROM recipe.recipes WHERE name LIKE :query AND deleted_at IS NULL ORDER BY recipe_id DESC",
-            countQuery="SELECT COUNT(1) FROM name LIKE :query AND recipe.recipes WHERE deleted_at IS NULL",
+            countQuery="SELECT COUNT(1) FROM recipe.recipes WHERE name LIKE :query AND deleted_at IS NULL",
             nativeQuery = true
     )
     Page<Recipe> getRecipes(@Param("query") String query, Pageable pageable);
