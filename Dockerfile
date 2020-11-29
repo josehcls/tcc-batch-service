@@ -20,7 +20,6 @@
 #
 FROM openjdk:11.0.8-jre-slim-buster
 ADD target/tcc-recipe-service-*.jar tcc-recipe-service.jar
-EXPOSE 8080
 ENTRYPOINT [ "sh", "-c", "java -Xms128m -Xmx256m -jar /tcc-recipe-service.jar" ]
 
 
